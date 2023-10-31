@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Too many promises in life</title>
+</head>
+<body>
+    <h3></h3>
+</body>
+<script>
+    const posts = [{One : "Posts One"}, {Two : "Posts Two"}];
+    let Data = "";
+    function createPost(newObj){
+        return new Promise((resolve, reject) => {
+            posts.push(newObj);
+            resolve();
+        })
+    }
+    function deletePost(){
+        return new Promise ((resolve, reject)=>{
+            posts.pop();
+            resolve()
+        })
+    }
+    function updateLastUserActivityTime(){
+        return new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                var date= new Date();
+                Data=`"User Last Activity Time is : ${date}"`;
+                resolve();
+            }, 1000);
+        })
+    }
+    function showData(){
+        for(var i=0; i<posts.length; i++){
+            let li=document.createElement('li');
+            li.innerText=`Posts : ${Object.keys(posts[i])[0]}, Values : ${Object.values(posts[i])[0]}`;
+            document.body.appendChild(li);
+        }
+        var li=document.createElement('li');
+        li.innerText=Data;
+        document.body.appendChild(li);
+    }
+    Promise.all([createPost({Three : "Posts Three"}), updateLastUserActivityTime()]).then(showData).then(() => {
+        Promise.all([deletePost(), updateLastUserActivityTime()]).then(showData);
+    });
+    
+</script>
+</html>
