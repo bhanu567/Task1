@@ -1,50 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Too many promises in life</title>
-</head>
-<body>
+  </head>
+  <body>
     <h3></h3>
-</body>
-<script>
-    const posts = [{One : "Posts One"}, {Two : "Posts Two"}];
-    let Data = "";
-    function createPost(newObj){
+  </body>
+  <script>
+    // const posts = [{ One: "Posts One" }, { Two: "Posts Two" }];
+    // let Data = "";
+    // function createPost(newObj) {
+    //   return new Promise((resolve, reject) => {
+    //     posts.push(newObj);
+    //     resolve();
+    //   });
+    // }
+    // function deletePost() {
+    //   return new Promise((resolve, reject) => {
+    //     posts.pop();
+    //     resolve();
+    //   });
+    // }
+    // function updateLastUserActivityTime() {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       var date = new Date();
+    //       Data = `"User Last Activity Time is : ${date}"`;
+    //       resolve();
+    //     }, 1000);
+    //   });
+    // }
+    // function showData() {
+    //   for (var i = 0; i < posts.length; i++) {
+    //     let li = document.createElement("li");
+    //     li.innerText = `Posts : ${Object.keys(posts[i])[0]}, Values : ${
+    //       Object.values(posts[i])[0]
+    //     }`;
+    //     document.body.appendChild(li);
+    //   }
+    //   var li = document.createElement("li");
+    //   li.innerText = Data;
+    //   document.body.appendChild(li);
+    // }
+    // Promise.all([
+    //   createPost({ Three: "Posts Three" }),
+    //   updateLastUserActivityTime(),
+    // ])
+    //   .then(showData)
+    //   .then(() => {
+    //     Promise.all([deletePost(), updateLastUserActivityTime()]).then(
+    //       showData
+    //     );
+    //   });
+
+    //By Async Await
+    const Posts = [{ One: "Posts One" }, { Two: "Posts Two" }];
+    let data = "";
+    async function taskCompleted() {
+      function createPost(newObj) {
         return new Promise((resolve, reject) => {
-            posts.push(newObj);
+          Posts.push(newObj);
+          resolve();
+        });
+      }
+
+      function updateLastUserActivityTime() {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            var date = new Date();
+            data = `"User Last Activity Time is : ${date}"`;
             resolve();
-        })
-    }
-    function deletePost(){
-        return new Promise ((resolve, reject)=>{
-            posts.pop();
-            resolve()
-        })
-    }
-    function updateLastUserActivityTime(){
-        return new Promise((resolve, reject)=>{
-            setTimeout(() => {
-                var date= new Date();
-                Data=`"User Last Activity Time is : ${date}"`;
-                resolve();
-            }, 1000);
-        })
-    }
-    function showData(){
-        for(var i=0; i<posts.length; i++){
-            let li=document.createElement('li');
-            li.innerText=`Posts : ${Object.keys(posts[i])[0]}, Values : ${Object.values(posts[i])[0]}`;
-            document.body.appendChild(li);
+          }, 1000);
+        });
+      }
+
+      function showData() {
+        for (var i = 0; i < Posts.length; i++) {
+          let li = document.createElement("li");
+          li.innerText = `Posts : ${Object.keys(Posts[i])[0]}, Values : ${
+            Object.values(Posts[i])[0]
+          }`;
+          document.body.appendChild(li);
         }
-        var li=document.createElement('li');
-        li.innerText=Data;
+        var li = document.createElement("li");
+        li.innerText = data;
         document.body.appendChild(li);
+      }
+
+      await Promise.all([
+        createPost({ Three: "Posts Three" }),
+        updateLastUserActivityTime(),
+      ]);
+
+      await showData();
+
+      function deletePost() {
+        return new Promise((resolve, reject) => {
+          Posts.pop();
+          resolve();
+        });
+      }
+
+      await Promise.all([deletePost(), updateLastUserActivityTime()]);
+
+      await showData();
+
+      return new Promise((resolve, reject) => resolve("Task Completed"));
     }
-    Promise.all([createPost({Three : "Posts Three"}), updateLastUserActivityTime()]).then(showData).then(() => {
-        Promise.all([deletePost(), updateLastUserActivityTime()]).then(showData);
-    });
-    
-</script>
+    taskCompleted().then((m) => console.log(m));
+  </script>
 </html>
